@@ -75,7 +75,8 @@ enum NSVGpaintType {
 	NSVG_PAINT_NONE = 0,
 	NSVG_PAINT_COLOR = 1,
 	NSVG_PAINT_LINEAR_GRADIENT = 2,
-	NSVG_PAINT_RADIAL_GRADIENT = 3
+	NSVG_PAINT_RADIAL_GRADIENT = 3,
+	NSVG_PAINT_SPECIAL = 4
 };
 
 enum NSVGspreadType {
@@ -786,8 +787,8 @@ static float nsvg__convertToPixels(NSVGparser* p, NSVGcoordinate c, float orig, 
 {
 	NSVGattrib* attr = nsvg__getAttr(p);
 	switch (c.units) {
-		case NSVG_UNITS_USER:		return c.value * p->dpi; // CUSTOMIZED FOR MERMAID
-		case NSVG_UNITS_PX:			return c.value * p->dpi; // CUSTOMIZED FOR MERMAID
+		case NSVG_UNITS_USER:		return c.value;// * p->dpi; // CUSTOMIZED FOR MERMAID
+		case NSVG_UNITS_PX:			return c.value;// * p->dpi; // CUSTOMIZED FOR MERMAID
 		case NSVG_UNITS_PT:			return c.value / 72.0f * p->dpi;
 		case NSVG_UNITS_PC:			return c.value / 6.0f * p->dpi;
 		case NSVG_UNITS_MM:			return c.value / 25.4f * p->dpi;
@@ -995,7 +996,7 @@ static void nsvg__addShape(NSVGparser* p)
 		nsvg__getLocalBounds(localBounds, shape, inv);
 		shape->fill.gradient = nsvg__createGradient(p, attr->fillGradient, localBounds, &shape->fill.type);
 		if (shape->fill.gradient == NULL) {
-			shape->fill.type = NSVG_PAINT_NONE;
+			shape->fill.type = NSVG_PAINT_SPECIAL;
 		}
 	}
 
